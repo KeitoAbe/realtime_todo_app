@@ -38,7 +38,7 @@ class _RealtimeTodoAppState extends State<RealtimeTodoApp> {
     );
   }
 
-  void addTask() {
+  Future<void> addTask() async {
     FocusScope.of(context).unfocus(); // Close the keyboard
 
     if (_textController.text.isEmpty) {
@@ -48,32 +48,22 @@ class _RealtimeTodoAppState extends State<RealtimeTodoApp> {
     String taskText = _textController.text;
     _textController.clear(); // Clear the input text
 
-    widget.supabase.from('todos').insert({'tasks': taskText}).then(
-      (value) {
-        setState(() {
-          tasks.add({
-            'id': value['id'],
-            'task': taskText
-          }); // Add the task to the list
-        });
-      },
-      onError: (error) {
-        handleError(error);
-      },
-    );
+    try {
+      await widget.supabase.from('todos').insert({'tasks': taskText});
+    } catch (error) {
+      handleError(error);
+    }
   }
 
-  void deleteTask(Map<String, dynamic> task) {
-    widget.supabase.from('todos').delete().eq('id', task['id']).then(
-      (value) {
-        setState(() {
-          tasks.remove(task); // Remove the task from the list
-        });
-      },
-      onError: (error) {
-        handleError(error);
-      },
-    );
+  Future<void> deleteTask(Map<String, dynamic> task) async {
+    try {
+      await widget.supabase.from('todos').delete().eq('id', task['id']);
+      setState(() {
+        tasks.remove(task); // Remove the task from the list
+      });
+    } catch (error) {
+      handleError(error);
+    }
   }
 
   void handleError(dynamic error) {
