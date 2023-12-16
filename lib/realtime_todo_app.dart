@@ -58,9 +58,6 @@ class _RealtimeTodoAppState extends State<RealtimeTodoApp> {
   Future<void> deleteTask(Map<String, dynamic> task) async {
     try {
       await widget.supabase.from('todos').delete().eq('id', task['id']);
-      setState(() {
-        tasks.remove(task); // Remove the task from the list
-      });
     } catch (error) {
       handleError(error);
     }
