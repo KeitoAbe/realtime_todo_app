@@ -16,7 +16,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<String> tasks = []; // Initialize an empty list of tasks
+  List<Map<String, dynamic>> tasks = []; // Initialize an empty list of tasks
   final TextEditingController _textController = TextEditingController();
 
   @override
@@ -26,7 +26,7 @@ class _MyHomePageState extends State<MyHomePage> {
     widget.supabase.from('todos').stream(primaryKey: ['id']).listen(
       (List<Map<String, dynamic>> data) {
         setState(() {
-          tasks = data.map((e) => e['tasks'] as String).toList();
+          tasks = data.map((e) => {'id': e['id'], 'task': e['tasks']}).toList();
         });
       },
       onError: (error) {
@@ -41,11 +41,17 @@ class _MyHomePageState extends State<MyHomePage> {
     if (_textController.text.isEmpty) {
       return; // Do nothing if the input text is empty
     }
-    widget.supabase.from('todos').insert({'tasks': _textController.text}).then(
+
+    String taskText = _textController.text;
+    _textController.clear(); // Clear the input text
+
+    widget.supabase.from('todos').insert({'tasks': taskText}).then(
       (value) {
         setState(() {
-          tasks.add(_textController.text); // Add the task to the list
-          _textController.clear(); // Clear the input text
+          tasks.add({
+            'id': value['id'],
+            'task': taskText
+          }); // Add the task to the list
         });
       },
       onError: (error) {
@@ -54,8 +60,8 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void deleteTask(String task) {
-    widget.supabase.from('todos').delete().eq('tasks', task).then(
+  void deleteTask(Map<String, dynamic> task) {
+    widget.supabase.from('todos').delete().eq('id', task['id']).then(
       (value) {
         setState(() {
           tasks.remove(task); // Remove the task from the list
@@ -94,13 +100,14 @@ class _MyHomePageState extends State<MyHomePage> {
               child: ListView.builder(
                 itemCount: tasks.length,
                 itemBuilder: (context, index) {
+                  final task = tasks[index];
                   return Card(
                     child: ListTile(
-                      title: Text(tasks[index]),
+                      title: Text(task['task']),
                       trailing: IconButton(
                         icon: const Icon(Icons.delete),
                         onPressed: () {
-                          deleteTask(tasks[index]);
+                          deleteTask(task);
                         },
                       ),
                     ),
