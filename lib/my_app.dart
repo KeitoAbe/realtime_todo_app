@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'my_home_page.dart';
+import 'realtime_todo_app.dart';
 
 class MyApp extends StatelessWidget {
   final SupabaseClient supabase;
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'リアルタイムTodoアプリ', supabase: supabase),
+      home: RealtimeTodoApp(title: 'リアルタイムTodoアプリ', supabase: supabase),
       debugShowCheckedModeBanner: false,
     );
   }

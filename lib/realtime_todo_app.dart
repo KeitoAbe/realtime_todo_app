@@ -4,18 +4,18 @@ import 'package:logger/logger.dart';
 
 var logger = Logger();
 
-class MyHomePage extends StatefulWidget {
+class RealtimeTodoApp extends StatefulWidget {
   final SupabaseClient supabase;
   final String title;
 
-  const MyHomePage({Key? key, required this.title, required this.supabase})
+  const RealtimeTodoApp({Key? key, required this.title, required this.supabase})
       : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<RealtimeTodoApp> createState() => _RealtimeTodoAppState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _RealtimeTodoAppState extends State<RealtimeTodoApp> {
   List<Map<String, dynamic>> tasks = []; // Initialize an empty list of tasks
   final TextEditingController _textController = TextEditingController();
 
