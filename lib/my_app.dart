@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'my_home_page.dart';
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final SupabaseClient supabase;
+  const MyApp({Key? key, required this.supabase}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'TODOアプリ',
+      title: 'リアルタイムTodoアプリ',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'TODOアプリ'),
+      home: MyHomePage(title: 'リアルタイムTodoアプリ', supabase: supabase),
       debugShowCheckedModeBanner: false,
     );
   }
