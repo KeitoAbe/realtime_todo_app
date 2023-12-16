@@ -36,6 +36,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void addTask() {
+    FocusScope.of(context).unfocus(); // Close the keyboard
+
     if (_textController.text.isEmpty) {
       return; // Do nothing if the input text is empty
     }
