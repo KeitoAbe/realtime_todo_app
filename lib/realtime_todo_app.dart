@@ -22,7 +22,10 @@ class _RealtimeTodoAppState extends State<RealtimeTodoApp> {
   @override
   void initState() {
     super.initState();
+    fetchTasks();
+  }
 
+  void fetchTasks() async {
     widget.supabase.from('todos').stream(primaryKey: ['id']).listen(
       (List<Map<String, dynamic>> data) {
         setState(() {
@@ -30,7 +33,7 @@ class _RealtimeTodoAppState extends State<RealtimeTodoApp> {
         });
       },
       onError: (error) {
-        logger.e('An error occurred: $error');
+        handleError(error);
       },
     );
   }
@@ -55,7 +58,7 @@ class _RealtimeTodoAppState extends State<RealtimeTodoApp> {
         });
       },
       onError: (error) {
-        logger.e('An error occurred: $error');
+        handleError(error);
       },
     );
   }
@@ -68,7 +71,28 @@ class _RealtimeTodoAppState extends State<RealtimeTodoApp> {
         });
       },
       onError: (error) {
-        logger.e('An error occurred: $error');
+        handleError(error);
+      },
+    );
+  }
+
+  void handleError(dynamic error) {
+    logger.e('An error occurred: $error');
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('エラー'),
+          content: Text(error.toString()),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
       },
     );
   }
