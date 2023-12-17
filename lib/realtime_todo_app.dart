@@ -26,16 +26,18 @@ class _RealtimeTodoAppState extends State<RealtimeTodoApp> {
   }
 
   void fetchTasks() async {
-    widget.supabase.from('todos').stream(primaryKey: ['id']).listen(
-      (List<Map<String, dynamic>> data) {
-        setState(() {
-          tasks = data.map((e) => {'id': e['id'], 'task': e['tasks']}).toList();
-        });
-      },
-      onError: (error) {
-        handleError(error);
-      },
-    );
+    try {
+      widget.supabase.from('todos').stream(primaryKey: ['id']).listen(
+        (List<Map<String, dynamic>> data) {
+          setState(() {
+            tasks =
+                data.map((e) => {'id': e['id'], 'task': e['tasks']}).toList();
+          });
+        },
+      );
+    } catch (error) {
+      handleError(error);
+    }
   }
 
   Future<void> addTask() async {
