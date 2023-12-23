@@ -52,6 +52,7 @@ class _RealtimeTodoAppState extends State<RealtimeTodoApp> {
 
     try {
       await widget.supabase.from('todos').insert({'tasks': taskText});
+      fetchTasks();
     } catch (error) {
       handleError(error);
     }
