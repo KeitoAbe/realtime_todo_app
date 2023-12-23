@@ -51,8 +51,9 @@ class _RealtimeTodoAppState extends State<RealtimeTodoApp> {
     _textController.clear(); // Clear the input text
 
     try {
-      await widget.supabase.from('todos').insert({'tasks': taskText});
-      fetchTasks();
+      await widget.supabase.from('todos').insert({'tasks': taskText}).then((_) {
+        fetchTasks();
+      });
     } catch (error) {
       handleError(error);
     }
