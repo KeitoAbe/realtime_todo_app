@@ -31,7 +31,7 @@ class _RealtimeTodoAppState extends State<RealtimeTodoApp> {
         (List<Map<String, dynamic>> data) {
           setState(() {
             tasks =
-                data.map((e) => {'id': e['id'], 'task': e['tasks']}).toList();
+                data.map((e) => {'id': e['id'], 'task': e['task']}).toList();
           });
         },
       );
@@ -51,7 +51,7 @@ class _RealtimeTodoAppState extends State<RealtimeTodoApp> {
     _textController.clear(); // Clear the input text
 
     try {
-      await widget.supabase.from('todos').insert({'tasks': taskText}).then((_) {
+      await widget.supabase.from('todos').insert({'task': taskText}).then((_) {
         fetchTasks();
       });
     } catch (error) {
